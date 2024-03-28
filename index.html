@@ -132,3 +132,75 @@
     }
     animate();
 </script>
+<script>
+    // JavaScript for 3D visualization using Three.js
+
+    // Initialize Three.js scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create posts (spheres)
+    const postGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const postMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const posts = [];
+
+    // Dummy data for posts with tags
+    const dummyPosts = [
+        { id: 0, title: "Post 1", tags: ["tag1", "tag2"] },
+        { id: 1, title: "Post 2", tags: ["tag2", "tag3"] },
+        { id: 2, title: "Post 3", tags: ["tag1", "tag3"] },
+        { id: 3, title: "Post 4", tags: ["tag4"] }
+    ];
+
+    // Function to add a post to the scene
+    function addPost(x, y, z, id) {
+        const post = new THREE.Mesh(postGeometry, postMaterial);
+        post.position.set(x, y, z);
+        scene.add(post);
+        post.userData.id = id;
+        posts.push(post);
+    }
+
+    // Add dummy posts to the scene
+    addPost(-2, 0, -5, 0);
+    addPost(0, 0, -5, 1);
+    addPost(2, 0, -5, 2);
+    addPost(-1, 1, -5, 3);
+
+    // Function to find common tags between two posts
+    function findCommonTags(post1, post2) {
+        return post1.tags.filter(tag => post2.tags.includes(tag));
+    }
+
+    // Function to draw lines between posts with common tags
+    function drawConnections() {
+        for (let i = 0; i < posts.length; i++) {
+            for (let j = i + 1; j < posts.length; j++) {
+                const commonTags = findCommonTags(dummyPosts[i], dummyPosts[j]);
+                if (commonTags.length > 0) {
+                    const lineGeometry = new THREE.Geometry();
+                    lineGeometry.vertices.push(posts[i].position, posts[j].position);
+                    const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
+                    const line = new THREE.Line(lineGeometry, lineMaterial);
+                    scene.add(line);
+                }
+            }
+        }
+    }
+
+    // Camera setup
+    camera.position.z = 5;
+
+    // Render function
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Draw connections between posts
+    drawConnections();
+</script>
