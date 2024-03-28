@@ -57,3 +57,78 @@
     // Call the renderPosts function when the page loads
     window.onload = renderPosts;
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>noname - Personal Webpage</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to noname</h1>
+    </header>
+    <main>
+        <div id="posts">
+            <!-- Posts will be dynamically added here -->
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 noname</p>
+    </footer>
+
+    <!-- Include Three.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // JavaScript for 3D visualization using Three.js
+        // This will be added below
+    </script>
+</body>
+</html>
+<script>
+    // JavaScript for 3D visualization using Three.js
+
+    // Initialize Three.js scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create posts (spheres)
+    const postGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const postMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    const posts = [];
+
+    // Function to add a post to the scene
+    function addPost(x, y, z) {
+        const post = new THREE.Mesh(postGeometry, postMaterial);
+        post.position.set(x, y, z);
+        scene.add(post);
+        posts.push(post);
+    }
+
+    // Add dummy posts to the scene
+    addPost(-2, 0, -5);
+    addPost(0, 0, -5);
+    addPost(2, 0, -5);
+    addPost(-1, 1, -5);
+
+    // Camera setup
+    camera.position.z = 5;
+
+    // Render function
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+</script>
